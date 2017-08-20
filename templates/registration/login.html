@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}登录{% endblock %}
+
+{% block content %}
+<div class='container'>
+    <div class='row'>
+        <div class='col-md-offset-3 col-md-6'>
+            <div class='center-block'>
+                {% if login_errors %}
+                    <div class='alert alert-warning' role='alert'>{{ login_errors }}</div>
+                {% endif %}
+                {% if form.non_field_errors %}
+                    <div class='alert alert-warning' role='alert'>{{ form.non_field_errors }}</div>
+                {% endif %}
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>
+                        <strong>登录</strong>
+                    </div>
+                    <div class='panel-body'>
+                        <form action="{% url 'django.contrib.auth.views.login' %}" method='post'>
+                            {% csrf_token %}
+                            {% for field in form %}
+                                <div class='form-group'>
+                                    {{ field.label_tag }}
+                                    {% if field.errors %}
+                                    <span class='text-danger pull-right'>{{ field.errors }}</span>
+                                    {% endif %}
+                                    {{ field }}
+                                    <p class='text-muted'>{{ field.help_text }}</p>
+                                </div>
+                            {% endfor %}
+                            <button type='submit' class='btn btn-defautl'>登录</button>
+                            <a href="{% url 'register' %}"><button type='button' class='btn btn-default' >新用户？注册</button></a>
+                            <input type='hidden' name='next' value='{{ next }}'/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

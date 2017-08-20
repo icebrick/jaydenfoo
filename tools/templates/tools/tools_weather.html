@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+
+{% block title %}天气情况{% endblock %}
+
+{% block content %}
+{% load static %}
+<br><br><br><br><br><br><br><br>
+<div class='site-content'>
+{% for i in 'xxxx' %}
+<div class='forecast-table'>
+    <div class='container'>
+        <div class='forecast-container weather'>
+            <!-- 当日天气 -->
+            <div class='today forecast'>
+                <!-- 顶部 时间-->
+                <div class='forecast-header weather-date'></div>
+                <!-- 内容 -->
+                <div class='forecast-content'>
+                    <div class='location weather-city'></div>
+                    <div class='degree'>
+                        <div class='num weather-tmp'></div>
+                        <div class='forecast-icon'>
+                            <img class='weather-cond' src="#" alt='' width=90>
+                        </div>
+                    </div>
+                    <span class='weather-aqi'><img src="{% static 'bootstrap/img/weather_icons/icon-umberella.png' %}" alt=''></span>
+                    <span class='weather-wind'><img src="{% static 'bootstrap/img/weather_icons/icon-wind.png' %}" alt=''></span>
+                    <span class='weather-cond-txt'></span>
+                </div>
+            </div>
+            <!-- 天气预报 -->
+            {% for j in 'xxxxxx' %}
+            <div class='forecast'>
+                <div class='forecast-header'>
+                    <div class='day weather-forecast-date'></div>
+                </div>
+                <div class='forecast-content weather-img'>
+                    <div class='forecast-icon'>
+                        <img class='weather-forecast-cond' src="#" alt='' width=48>
+                    </div>
+                    <div class='degree weather-forecast-tmp-max'></div>
+                    <small class='weather-forecast-tmp-min'></small>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<br><br><br><br><br><br><br><br>
+{% endfor %}
+</div>
+
+<hr>
+<link href="{% static 'bootstrap/css/weather.css' %}" rel="stylesheet" type="text/css">
+<script>
+$(function () {
+    $.getJSON('/tools/weather-get-data-timely', function(data) {
+        var city = ['上海', '北京', '厦门', '拉萨'];
+        var week = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六',]
+        for (var i=0; i<4; i++) {
+            //当日天气
+            //跟新时间
+            var weather_date = data[city[i]]['update']['loc']
+            var weather_city = data[city[i]]['city']
+            var weather_cond = data[city[i]]['condition']
+            var weather_cond_txt = data[city[i]]['cond_txt']
+            var weather_tmp = data[city[i]]['tmp']
+
+            $('.weather:eq('+i+') .weather-date').text('更新时间（当地)：'+weather_date);
+            $('.weather:eq('+i+') .weather-city').text(weather_city);
+            $('.weather:eq('+i+') .weather-cond').attr('src', "{% static 'bootstrap/img/weather_icons/icons/"+weather_cond+".png' %}")
+            $('.weather:eq('+i+') .weather-cond-txt').text(weather_cond_txt);
+            $('.weather-tmp').eq(i).html(weather_tmp + '<sup>o</sup>C');
+            $('.weather-aqi').eq(i).append(data[city[i]]['aqi']+' '+data[city[i]]['aqi_str']);
+            $('.weather-wind').eq(i).append(data[city[i]]['wind_direction']+' '+data[city[i]]['wind_speed']);
+            //天气预测
+            for (var j=1; j<7; j++) {
+                var forecast_date = data[city[i]]['forecast'][j]['date'];
+                var d = new Date(Date.parse(forecast_date))
+
+                var forecast_cond = data[city[i]]['forecast'][j]['cond']['code_d'];
+                var forecast_tmp_max = data[city[i]]['forecast'][j]['tmp']['max'];
+                var forecast_tmp_min = data[city[i]]['forecast'][j]['tmp']['min'];
+
+                $('.weather:eq('+i+') .weather-forecast-date:eq('+(j-1)+')').text(week[d.getDay()])
+                $('.weather:eq('+i+') .weather-forecast-cond:eq('+(j-1)+')').attr('src', "{% static 'bootstrap/img/weather_icons/icons/"+forecast_cond+".png' %}")
+                $('.weather:eq('+i+') .weather-forecast-tmp-max:eq('+(j-1)+')').text(forecast_tmp_max)
+                $('.weather:eq('+i+') .weather-forecast-tmp-min:eq('+(j-1)+')').text(forecast_tmp_min)
+            };
+        };
+    })
+})
+</script>
+<style>
+    .weather-img {
+        padding: 50px 0px 20px !important;
+    }
+</style>
+{% endblock %}

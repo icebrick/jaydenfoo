@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+
+{% block title %}历史天气数据统计{% endblock %}
+
+{% block content %}
+{% load static %}
+<div class='container'>
+    {% for city in data %}
+    <div class='row'>
+        <div class='panel panel-success'>
+            <div class='panel-heading'><h3>{{ city }}</h3></div>
+            <div class='panel-body'>
+                <div class='col-md-6'>
+                    <p class='text-center text-warning'>历史气温趋势图</p>
+                    <canvas class='tmp'></canvas>
+                </div>
+                <div class='col-md-6'>
+                    <p class='text-center text-warning'>空气质量分布图</p>
+                    <canvas class='aqi'></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+<script src="{% static 'bootstrap/js/Chart.js' %}"></script>
+<script>
+    var ctxTmp = []
+    var tmpData = []
+    var tmpChart = []
+
+    var ctxAqi = []
+    var aqiData = []
+    var aqiChart = []
+
+    var aqiColor = ['#99CCFF', '#CCFFFF', '#FFCC33', '#CC9933', '#663333', '#99CCCC', '#FFCCCC']
+{% for city,info in data.items %}
+    var i = {{forloop.counter0}}
+
+    //每日温度图（最高和最低气温)
+    ctxTmp[i] = $(".tmp").get(i).getContext("2d");
+
+    var labelsDate = []
+    var tmpMin = []
+    var tmpMax = []
+    {% for date, value in info.tmp_min.items %}
+        labelsDate.push('{{ date }}')
+        tmpMin.push({{ value.tmp__min }})
+    {% endfor %}
+
+    {% for date, value in info.tmp_max.items %}
+        tmpMax.push({{ value.tmp__max }})
+    {% endfor %}
+
+    tmpData[i] = {
+        labels : labelsDate,
+        datasets : [
+                    {
+                                fillColor : "rgba(220,220,220,0.5)",
+                                strokeColor : "rgba(220,220,220,1)",
+                                pointColor : "rgba(220,220,220,1)",
+                                pointStrokeColor : "#fff",
+                                data : tmpMin
+                            },
+                    {
+                                fillColor : "rgba(151,187,205,0.5)",
+                                strokeColor : "rgba(151,187,205,1)",
+                                pointColor : "rgba(151,187,205,1)",
+                                pointStrokeColor : "#fff",
+                                data : tmpMax
+                            }
+                    ]
+    }
+
+    tmpChart[i] = new Chart(ctxTmp[i]).Line(tmpData[i], {responsive: true});
+
+    //空气质量统计饼形图
+    ctxAqi[i] = $(".aqi").get(i).getContext("2d");
+
+    aqiData[i] = [
+        {% for key, value in info.aqi_counter.items %}
+        {
+            value: {{ value }},
+            color: aqiColor[{{ forloop.counter0 }}],
+            label: '{{ key }}'
+        },
+        {% endfor %}
+    ]
+
+    aqiChart[i] = new Chart(ctxAqi[i]).Pie(aqiData[i], {responsive: true});
+{% endfor %}
+</script>
+{% endblock %}

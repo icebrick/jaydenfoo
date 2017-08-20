@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+{% block title %}博客{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <!-- 文章列表 -->
+    <div class="col-md-8">
+      <div class="panel panel-default">
+        <div class="panel-body">
+        <!-- 如果是标签列表  -->
+        {% if this_tag %}
+          <h3 class="text-info">{{ this_tag.name }}</h3>
+          <br>
+        {% endif %}
+
+        {% for article in article_paginator_list %}
+          <h4><a href="{% url 'blog:detail' article.id %}"> {{ article.title }}</a><small>&nbsp&nbsp&nbsp&nbsp{{ article.pub_date|date:"Y-m-d"}}</small></h4>
+          <p>{{ article.abstract }}</p>
+          <hr>
+        {% empty %}
+          <h4>还没有文章</h4>
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- 标签栏 -->
+    <div class="col-md-4">
+      <div class="panel panel-success">
+        <div class="panel-heading">
+          <h3 class="panel-title">全部标签</h3>
+        </div>
+        <div class="panel-body">
+        {% for tag in tag_list %}
+        <a href="{% url 'blog:tags' tag.id 1 %}"><u>{{ tag.name }}</u></a>&nbsp
+        {% empty %}
+        <li> No tags</li>
+        {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 分页 -->
+  <!-- TODO: 简化情况判断 -->
+  <div class="row">
+  	<div class="col-md-4 col-md-offset-2">
+  		<ul class="pager">
+  		{% if article_paginator_list.has_previous %}
+  		  {% if this_tag %}
+  		    <li><a href="{% url 'blog:tags' this_tag.id article_paginator_list.previous_page_number %}">上一页</a></li>
+  		  {% else %}
+  		    <li><a href="{% url 'blog:paginator' article_paginator_list.previous_page_number %}">上一页</a></li>
+  		  {% endif %}
+
+  		{% else %}
+  		  <li class="disabled"><a>上一页</a></li>
+  		{% endif %}
+
+  		{{ article_paginator_list.number }} of {{ article_paginator_list.paginator.num_pages }}
+
+      {% if article_paginator_list.has_next %}
+        {% if this_tag %}
+          <li><a href="{% url 'blog:tags' this_tag.id article_paginator_list.next_page_number %}">下一页</a></li>
+        {% else %}
+          <li><a href="{% url 'blog:paginator' article_paginator_list.next_page_number %}">下一页</a></li>
+        {% endif %}
+      {% else %}
+        <li class="disabled"><a>下一页</a></li>
+      {% endif %}
+      </ul>
+  	</div>
+  </div>
+</div>
+<script type="text/javascript">
+//最笨的方法控制导航栏
+$(function () {
+      $('#nav_blog').parent().addClass('active')
+      $('#nav_album').parent().removeClass('active')
+      $('#nav_zheteng').parent().removeClass('active')
+    })
+</script>
+{% endblock %}

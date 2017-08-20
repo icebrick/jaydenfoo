@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% block title %}Schedule{% endblock %}
+
+{% block content %}
+<div class='container'>
+{% if user.is_authenticated %}
+    <button type='button' class='btn btn-info' data-toggle='modal', data-target='#itemAddModal'>
+        新增条目
+    </button>
+    <hr>
+    <!-- 达成的目标 -->
+    {% for item in items %}
+        {% if item.finish %}
+            <div class='alert alert-warning schedule-item', role='alert' data-finish-state='{{item.finish}}'>
+                <div class='pull-left'>
+                    <span class='label label-default'>创建日期：{{ item.pub_date }}</span>
+                    <span class='label label-default'>截止日期：{{ item.deadline }}</span>
+                </div>
+                <br><br>
+                {{ item.content|linebreaks }}
+            </div>
+        {% endif %}
+    {% empty %}
+        <p>还没有日程！</p>
+    {% endfor %}
+    <!-- 未达成目标 -->
+    {% for item in items %}
+        {% if not item.finish %}
+            <div class='alert alert-success schedule-item', role='alert' data-finish-state='{{item.finish}}'>
+                <div class='pull-left'>
+                    <span class='label label-default'>创建日期：{{ item.pub_date }}</span>
+                    <span class='label label-default'>截止日期：{{ item.deadline }}</span>
+                </div>
+                <br><br>
+                {{ item.content|linebreaks }}
+                {% if not item.finish %}
+                <div class='row'>
+                    <hr>
+                    <div class='pull-right'>
+                        <label class='btn btn-info btn-xs'>
+                            <input type='checkbox' class='finishCheck' style='display:none' data-item={{item.id}} />
+                            <span class="glyphicon glyphicon-ok"> 完成?</span>
+                        </label>
+                        &nbsp&nbsp&nbsp
+                        <a href="{% url 'tools:schedule' %}?action=delete&item_id={{item.id}}">删除</a>
+                        &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endfor %}
+{% endif %}
+
+    <!-- Model -->
+    <!-- itemAddModal -->
+    <div class="modal fade" id="itemAddModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="myModalLabel">新增计划</h4>
+                </div>
+                <div class="modal-body">
+                    {{ ItemAddForm.non_field_errors }}
+                    <form action='{% url 'tools:schedule' %}' method='post'>
+                        {% csrf_token %}
+                        {{ ItemAddForm.content.errors }}
+                        <div class='form-group textarea-align'>
+                            {{ ItemAddForm.content.label_tag }}
+                            {{ ItemAddForm.content }}
+                        </div>
+                        {{ ItemAddForm.deadline.errors }}
+                        <div class='form-group'>
+                            {{ ItemAddForm.deadline.label_tag }}
+                            <input type='text' value='' readonly class='form_datetime' name='{{ ItemAddForm.deadline.html_name }}' id='{{ ItemAddForm.deadline.id_for_label }}'>
+                        </div>
+                        <input type='hidden' name='user' value='{{ request.user.username }}'/>
+                        <input type='hidden' name='finish' value=false />
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                            <button type="submit" class="btn btn-primary">保存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% load static %}
+<link rel='stylesheet', href="{% static 'bootstrap/css/bootstrap-datetimepicker.min.css' %}">
+<script src="{% static 'bootstrap/js/bootstrap-datetimepicker.min.js' %}"></script>
+
+<script type='text/javascript'>
+    //日期选择插件
+    $('.form_datetime').datetimepicker({
+            format: 'yyyy-mm-dd hh:ii'
+            });
+    //点击目标达成按钮后重刷新页面
+    $('.finishCheck').change(function() {
+            window.location="{{ request.path }}?action=finishCheck&item_id=" + $(this).data('item')
+            });
+
+</script>
+
+<style>
+    .textarea-align * {
+        vertical-align: middle
+    }
+</style>
+{% endblock %}

@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block title %}注册{% endblock %}
+
+{% block content %}
+<div class='container'>
+    <div class='row'>
+        <div class='col-md-offset-3 col-md-6'>
+            <div class='center-block'>
+                {% if form.non_field_errors %}
+                    <div class='alert alert-warning' role='alert'>{{ form.non_field_errors }}</div>
+                {% endif %}
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>
+                        <strong>注册</strong>
+                    </div>
+                    <div class='panel-body'>
+                        <form action="{% url 'register' %}" method='post'>
+                            {% csrf_token %}
+                            {% for field in form %}
+                                <div class='form-group'>
+                                    {{ field.label_tag }}
+                                    {% if field.errors %}
+                                    <span class='text-danger pull-right'>{{ field.errors }}</span>
+                                    {% endif %}
+                                    {{ field }}
+                                    <p class='text-muted'>{{ field.help_text }}</p>
+                                </div>
+                            {% endfor %}
+                            <button type='submit' class='btn btn-defautl'>注册</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .center-block {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        }
+
+    .element {
+        .center-block();
+            }
+</style>
+{% endblock %}

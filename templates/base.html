@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- 上述3个meta标签*必须*放在最前面，任何其他内容都*必须*跟随其后！ -->
+    <title>{% block title %} {% endblock %}</title>
+
+    <!-- Bootstrap -->
+    <link href="{% static 'bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- jquery -->
+    <script type="text/javascript" src="{% static 'bootstrap/js/jquery.min.js' %}"></script>
+
+    <!-- Bootstrap-js -->
+    <script type="text/javascript" src="{% static 'bootstrap/js/bootstrap.min.js' %}"></script>
+
+    <!-- font-awesome -->
+    <link rel="stylesheet" href="{% static 'bootstrap/font-awesome/css/font-awesome.min.css' %}" type="text/css">
+
+    <!-- for ueditor syntax highlight -->
+    <link href="{% static 'ueditor/third-party/SyntaxHighlighter/shCoreDefault.css' %}" rel="stylesheet"/>
+    <script type="text/javascript" src="{% static 'ueditor/third-party/SyntaxHighlighter/shCore.js' %}"></script>
+
+    <!-- 来之于首页样式 for album-->
+    <!-- Custom Fonts -->
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Merriweather:400,300,300italic,400italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+
+    <!-- Plugin CSS -->
+    <link rel="stylesheet" href="{% static 'bootstrap/css/animate.min.css' %}" type="text/css">
+
+    <!-- Custom CSS 为了不影响其他页面，将只在相册中用到的效果从creative.css中提取出来放到album.css -->
+    <!--link rel="stylesheet" href="{% static 'bootstrap/css/creative.css' %}" type="text/css"-->
+    <link rel="stylesheet" href="{% static 'bootstrap/css/album.css' %}" type="text/css">
+
+    <!-- Plugin JavaScript -->
+    <script src="{% static 'bootstrap/js/jquery.easing.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/jquery.fittext.js' %}"></script>
+    <script src="{% static 'bootstrap/js/wow.min.js' %}"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="{% static 'bootstrap/js/creative.js' %}"></script>
+
+    <!-- 幻灯片效果 -->
+    <link rel="stylesheet" href="{% static 'bootstrap/css/blueimp-gallery.min.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap-image-gallery.min.css' %}">
+
+    <script src="{% static 'bootstrap/js/jquery.blueimp-gallery.min.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap-image-gallery.min.js' %}"></script>
+
+    <!-- 图片布局 -->
+
+    <script src="{% static 'bootstrap/js/masonry.pkgd.min.js' %}"></script>
+    <!-- 检测图片是否加载完成 -->
+    <script src="{% static 'bootstrap/js/imagesloaded.pkgd.min.js' %}"></script>
+  </head>
+  <body>
+    <!-- 导航栏 -->
+   <nav class="navbar navbar-default">
+	 <div class="container-fluid">
+	    <div class="navbar-header">
+		    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+	        <span class="sr-only">Toggle navigation</span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	        <span class="icon-bar"></span>
+	      </button>
+	      <a class="navbar-brand" href="/">JAYDEN FOO</a>
+	    </div>
+
+	    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+	      <ul class="nav navbar-nav">
+	        <li><a id='nav_blog' href="{% url 'blog:paginator' 1 %}">博客<span class="sr-only">(current)</span></a></li>
+	        <li><a id='nav_album' href="{% url 'album:index' %}">画册</a></li>
+	        <li><a id='nav_zheteng' href="{% url 'tools:index' %}">折腾</a></li>
+	      </ul>
+          <ul class='nav navbar-nav navbar-right'>
+              {% if user.is_authenticated %}
+                <li><p class='navbar-text'><strong>{{ user.username }}</strong></p></li>
+                <li><a href="{% url 'logout' %}?next={{ request.path }}">注销</a></li>
+              {% else %}
+              <li><a href="{% url 'login' %}?next={{ request.path }}">登录</a><li>
+              <li><a href="{% url 'register' %}">注册</a><li>
+              {% endif %}
+          </ul>
+	    </div>
+	  </div>
+	</nav>
+    {% block content %} {% endblock %}
+  </body>
+</html>

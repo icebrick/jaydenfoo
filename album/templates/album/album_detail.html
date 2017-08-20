@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+
+
+{% block title %}{{ this_album.name }}{% endblock %}
+
+{% block content %}
+{% load thumbnail %}
+<div class="container">
+    <div class="row">
+        <h2 class="text-center">{{ this_album.name }}</h2>
+        <hr>
+        <br>
+    </div>
+</div>
+
+<div class="container">
+		<div class="grid">
+		    {% for photo in this_album.photo_set.all %}
+		        <div class="grid-item">
+		            <a href="{{ photo.image.url }}" class='portfolio-box' data-gallery>
+		                <image src="{% thumbnail photo.image 400x400 %}" class="img-responsive" alt="图片被浏览器吃了（T﹏T）">
+		            </a>
+		        </div>
+		    {% endfor %}
+		</div>
+</div>
+
+<!-- The Bootstrap Image Gallery lightbox, should be a child element of the document body -->
+<div id="blueimp-gallery" class="blueimp-gallery blueimp-gallery-controls" data-use-bootstrap-modal="false">
+    <!-- The container for the modal slides -->
+    <div class="slides"></div>
+    <!-- Controls for the borderless lightbox -->
+    <h3 class="title"></h3>
+    <a class="prev">‹</a>
+    <a class="next">›</a>
+    <a class="close">×</a>
+    <a class="play-pause"></a>
+    <ol class="indicator"></ol>
+</div>
+
+<script type="text/javascript" >
+    $(document).ready(function () {
+        var $grid = $('.grid').masonry({
+                                itemSelector: '.grid-item',
+                                    columnWidth: '.grid-item',
+                                    gutter: 10,
+                                    percentPosition: true
+                                });
+
+    $grid.imagesLoaded().progress( function() {
+    //init Masonry after all images have loaded
+        $grid.masonry('layout')
+    });
+
+
+//最笨的方法控制导航栏
+      $('#nav_blog').parent().removeClass('active')
+      $('#nav_album').parent().addClass('active')
+      $('#nav_zheteng').parent().removeClass('active')
+    })
+</script>
+
+<style type="text/css">
+    .grid-item {
+        float:left;
+        width:100%;
+        margin-bottom:10px
+    }
+    @media screen and (min-width: 768px) {
+        .grid-item { width: 32%;  }
+    }
+
+</style>
+{% endblock %}

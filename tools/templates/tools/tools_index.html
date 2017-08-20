@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %} 工具 {% endblock %}
+
+
+{% block content %}
+<div class="container">
+	<div class="row">
+        <div class="col-md-6 col-sm-6">
+            <div class="jumbotron">
+                <h1 class="text-center">节拍器</h1>
+                <p class="text-center">简单的节拍器，学习乐器时使用</p>
+                <p class="text-center"><a href="{% url 'tools:tempo' %}"class="btn btn-success btn-lg">进入</a></p>
+            </div>
+        </div>
+        <div class='col-md-6 col-sm-6'>
+            <div class="jumbotron">
+                <h1 class="text-center">计划表</h1>
+                <p class="text-center">简单的个人计划时间表，需要登录使用</p>
+                <p class="text-center"><a href="{% url 'tools:schedule' %}"class="btn btn-success btn-lg">进入</a></p>
+            </div>
+        </div>
+        <div class='col-md-6 col-sm-6'>
+            <div class="jumbotron">
+                <h1 class="text-center">天气情况</h1>
+                <p class="text-center">四城天气预报,实时更新</p>
+                <p class="text-center"><a href="{% url 'tools:weather' %}"class="btn btn-success btn-lg">进入</a></p>
+            </div>
+        </div>
+        <div class='col-md-6 col-sm-6'>
+            <div class="jumbotron">
+                <h1 class="text-center">天气信息统计</h1>
+                <p class="text-center">图表展示历史天气统计结果，包括气温走势和空气质量分布</p>
+                <p class="text-center"><a href="{% url 'tools:weather_statistics' %}"class="btn btn-success btn-lg">进入</a></p>
+            </div>
+        </div>
+	</div>
+</div>
+<script type="text/javascript">
+//最笨的方法控制导航栏
+  $(function () {
+    $('#nav_blog').parent().removeClass('active')
+    $('#nav_zheteng').parent().addClass('active')
+  })
+</script>
+{% endblock %}}

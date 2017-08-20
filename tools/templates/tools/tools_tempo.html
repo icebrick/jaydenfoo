@@ -1,0 +1,162 @@
+{% extends "base.html" %}
+{% block title %}节拍器{% endblock %}
+{% block content %}
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 col-md-offset-4">
+        <div class=" panel panel-info">
+          <div class="panel-heading">
+            <h3>Simple Tempo</h3>
+          </div>
+          <div class="panel-body">
+            <div class="btn-group" id="checkbox-group" data-toggle="buttons">
+	           <label class="btn btn-default active btn-xs">
+	             <input type="checkbox" id="checkbox1" autocomplete="off" value="0" aria-label="..." checked>
+	             <span class="glyphicon glyphicon-heart"></span>
+	           </label>
+	           <label class="btn btn-default btn-xs">
+	             <input type="checkbox" id="checkbox2" value="1" aria-label="...">
+	             <span class="glyphicon glyphicon-heart"></span>
+	           </label>
+	           <label class="btn btn-default btn-xs">
+	             <input type="checkbox" id="checkbox3" value="2" aria-label="...">
+	             <span class="glyphicon glyphicon-heart"></span>
+	           </label>
+	           <label class="btn btn-default btn-xs">
+	             <input type="checkbox" id="checkbox4" value="3" aria-label="...">
+	             <span class="glyphicon glyphicon-heart"></span>
+	           </label>
+	          </div>
+	          <form class="form-horizontal">
+	           <div class="form-group">
+	             <label class="col-sm-2 control-label">BMP: </label>
+	             <div class="col-sm-10">
+	               <input type="text" class="form-control" id="bmp" value="60">
+	             </div>
+	           </div>
+	           <div class="form-group">
+	             <label class="col-sm-2 control-label">Beats: </label>
+	             <div class="col-sm-10">
+	               <input type="text" class="form-control" id="beats" value="4">
+	             </div>
+	           </div>
+	           <div class="form-group">
+	             <div class="col-sm-offset-4 col-sm-8">
+	               <button type="button" class="btn btn-success" id="play-btn">Play</button>
+	             </div>
+	           </div>
+	          </form>
+         </div>
+       </div>
+     </div>
+   </div>
+  </div>
+
+
+
+
+  <script>
+  //最笨的方法控制导航栏
+    $(function () {
+      $('#nav_blog').parent().removeClass('active')
+      $('#nav_album').parent().removeClass('active')
+      $('#nav_zheteng').parent().addClass('active')
+    })
+
+    // 简易节拍器，可以设置拍频和拍数和重拍点
+    // 参考http://cool.techbrood.com/fiddle/727
+
+    window.AudioContext = window.AudioContext || window.webkitAudioContext;
+    var context = new AudioContext();
+    var Gain = context.createGain();
+    Gain.gain.value = 1000;
+    var timer, curTime, beatsPos = 0;
+    var boxSelected = [1,0,0,0];
+
+    // 记录被选中的拍子
+    function boxCheck() {
+    	if(this.checked){
+        boxSelected[this.value] = 1;
+    	}
+    	else {
+        boxSelected[this.value] = 0;
+    	}
+    };
+
+    // 将checkbox的点击事件绑定到函数boxCheck
+    $('input:checkbox').change(boxCheck);
+
+    // 点击play按钮，节拍器开始打拍
+    $('#play-btn').click(function () {
+      curTime = context.currentTime;
+      schedule();
+    });
+
+    // 拍数输入框事件，改变拍数后重新调整页面上的拍点框
+    $('#beats').change(function () {
+      var reg = /^[2-9]{1}$/;
+      if (reg.test(this.value)) {
+        var i, temp, group = $('#checkbox-group');
+        group.html("");
+        for (i=0; i<this.value; i++) {
+
+          temp = "<label class='btn btn-default btn-xs'><input type='checkbox' id='checkbox"+i+"' value='"+i+"' aria-label='...'><span class='glyphicon glyphicon-heart'></span></label>"
+          group.append(temp);
+        }
+        $('#checkbox0').prop({'checked': true});
+        $('#checkbox-group label:first-child').addClass('active');
+        $('input:checkbox').change(boxCheck);
+        $('input:checkbox').trigger('change');
+      }
+      });
+
+    // 网页发声函数
+    function playSound(t) {
+      var note = context.createOscillator();
+      // 根据不同的重拍点设置不同的频率
+      if (boxSelected[beatsPos]) {
+        note.frequency.value = 380;
+      }
+      else {
+        note.frequency.value = 700;
+      }
+      note.connect(Gain);
+      Gain.connect(context.destination);
+      // 网页讲在t时间发声
+      // 发声0.05秒
+      note.start(t);
+      note.stop(t + 0.05);
+      // 暂时未用到，用来控制拍点框随着拍数有视觉上的跳动
+      beatsPos += 1;
+      beatsPos = beatsPos%(boxSelected.length);
+    }
+
+    // 当实际时间到达应该发声时间的前0.1秒，调用playSound，并重新计算下次发声时间
+    function schedule() {
+      while (curTime < context.currentTime + 0.1) {
+          playSound(curTime);
+          updateTime();
+      }
+      timer = window.setTimeout(schedule, 0.1);
+    }
+
+    // 根据拍频计算下次发声的时间，使网页在curTime时间节点发声
+    function updateTime() {
+      curTime += 60.0 / parseInt($('#bmp').val(), 10);
+    }
+  </script>
+  <style type="text/css">
+    .btn span.glyphicon {
+	   opacity: 0;
+    }
+    .btn.active span.glyphicon {
+	   opacity: 1;
+    }
+
+    label.btn {
+      margin-bottom: 20px;
+      margin-right: 8px;
+    }
+  </style>
+{% endblock %}
+
