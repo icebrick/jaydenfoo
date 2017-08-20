@@ -15,7 +15,12 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 import tempfile
 import os.path
+import platform
 
+if platform.node()=="bandwagohost-vps-ubuntu":
+    DEBUG = False
+else:
+    DEBUG = True
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -32,10 +37,9 @@ SECRET_KEY = 'v6qkw03_b$3wmy**9c&)txnuj76)(+vj*rut+n$p4e2della)4'
 # else:
 #     DEBUG = True
 
-DEBUG = True
 
 if DEBUG:
-    ALLOWED_HOSTS = ['127.0.0.1', '67.216.217.73', 'www.jaydenfoo.com']
+    ALLOWED_HOSTS = ['127.0.0.1']
 else:
     ALLOWED_HOSTS = ['jaydenfoo.com', '67.216.217.73', 'www.jaydenfoo.com']
 
