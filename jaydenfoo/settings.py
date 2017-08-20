@@ -35,9 +35,9 @@ SECRET_KEY = 'v6qkw03_b$3wmy**9c&)txnuj76)(+vj*rut+n$p4e2della)4'
 DEBUG = True
 
 if DEBUG:
-    ALLOWED_HOSTS = ['127.0.0.1', '67.216.217.73']
+    ALLOWED_HOSTS = ['127.0.0.1', '67.216.217.73', 'www.jaydenfoo.com']
 else:
-    ALLOWED_HOSTS = ['jaydenfoo.com', '67.216.217.73']
+    ALLOWED_HOSTS = ['jaydenfoo.com', '67.216.217.73', 'www.jaydenfoo.com']
 
 # Application definition
 
