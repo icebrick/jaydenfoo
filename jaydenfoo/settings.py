@@ -17,7 +17,7 @@ import tempfile
 import os.path
 import platform
 
-if platform.node()=="bandwagohost-vps-ubuntu":
+if platform.node()=="bandwagonhost-vps-ubuntu":
     DEBUG = False
 else:
     DEBUG = True
