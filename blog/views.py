@@ -35,7 +35,7 @@ class BlogPaginatorView(generic.ListView):
     context_object_name = 'article_paginator_list'
 
     def get_queryset(self):
-        if self.kwargs.has_key('tag_id'):
+        if 'tag_id' in self.kwargs:
             self.tag = get_object_or_404(Tag, id=self.kwargs['tag_id'])
             article_list = self.tag.article_set.order_by('-pub_date')
         else:
@@ -55,7 +55,7 @@ class BlogPaginatorView(generic.ListView):
     def get_context_data(self, **kwargs):
         context = super(BlogPaginatorView, self).get_context_data(**kwargs)
         context['tag_list'] = Tag.objects.all()
-        if self.kwargs.has_key('tag_id'):
+        if 'tag_id' in self.kwargs:
             context['this_tag'] = self.tag
         return context
 

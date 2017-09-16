@@ -53,7 +53,9 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
-    'DjangoUeditor',
+    'ckeditor',
+    'ckeditor_uploader',
+    #'DjangoUeditor',
     'tools',
     'hitcount',
     'album',
@@ -146,7 +148,8 @@ EMAIL_HOST = 'smtp.163.com'
 EMAIL_PORT = 25
 EMAIL_HOST_USER = 'icebrick@163.com'
 EMAIL_HOST_PASSWORD = ''
-
+# ckeditor setting
+CKEDITOR_UPLOAD_PATH = 'ckuploader/'
 #hitcout settings
 HITCOUNT_KEEP_HIT_ACTIVE = {'days': 1}
 HITCOUNT_HITS_PER_IP_LIMIT = 0  # unlimited

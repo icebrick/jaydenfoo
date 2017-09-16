@@ -2,10 +2,11 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.encoding import smart_str, smart_unicode
+from django.utils.encoding import smart_str, smart_text
 
 import xml.etree.ElementTree as ET
-import hashlib, urllib, urllib2, time
+import hashlib, time
+from urllib.request import urlopen, Request, quote
 
 from .models import WechatData
 
@@ -41,10 +42,10 @@ def responseMsg(request):
     queryStr = msg.get('Content', 'You have input nothing')
 
     raw_youdaoURL = "http://fanyi.youdao.com/openapi.do?keyfrom=%s&key=%s&type=data&doctype=%s&version=1.1&q=" % (YOUDAO_KEY_FROM,YOUDAO_KEY,YOUDAO_DOC_TYPE)
-    youdaoURL = '%s%s' % (raw_youdaoURL, urllib2.quote(queryStr))
+    youdaoURL = '%s%s' % (raw_youdaoURL, quote(queryStr))
 
-    req = urllib2.Request(url=youdaoURL)
-    result = urllib2.urlopen(req).read()
+    req = Request(url=youdaoURL)
+    result = urlopen(req).read()
 
     replyContent = parseYouDaoXml(ET.fromstring(result))
 

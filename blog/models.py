@@ -1,6 +1,8 @@
 from django.db import models
+from ckeditor.fields import RichTextField
+from ckeditor_uploader.fields import RichTextUploadingField
 
-from DjangoUeditor.models import UEditorField
+#from DjangoUeditor.models import UEditorField
 # Create your models here.
 class Tag(models.Model):
     name = models.CharField(max_length=200, unique=True)
@@ -13,7 +15,8 @@ class Article(models.Model):
     author = models.CharField(max_length=200)
     pub_date = models.DateTimeField('date publishded')
     abstract = models.CharField(max_length=2000, blank=True)
-    content = UEditorField(u'content    ', width=600, height=300, toolbars="full", imagePath="blog/article_image/", filePath="blog/article_file/", upload_settings={"imageMaxSize":1204000}, settings={}, command=None, blank=True)
+    content = RichTextUploadingField()
+    #content = UEditorField(u'content    ', width=600, height=300, toolbars="full", imagePath="blog/article_image/", filePath="blog/article_file/", upload_settings={"imageMaxSize":1204000}, settings={}, command=None, blank=True)
     count_hit = models.IntegerField(default=0, editable=False)
     tags = models.ManyToManyField(Tag, blank=True)
     def __unicode__(self):

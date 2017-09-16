@@ -11,7 +11,8 @@ import collections
 
 from .models import Weather, ScheduleItem
 from .forms import ScheduleItemForm
-import urllib2
+#import urllib2
+from urllib.request import urlopen
 import json
 import ast
 
@@ -37,7 +38,7 @@ def ToolsWeatherGetDataView(request):
             'http://api.heweather.com/x3/weather?cityid=CN101140101&key=70b4a25780c44125a37b8f25f946b169',
            ]
     for url in urls:
-        response = urllib2.urlopen(url)
+        response = urlopen(url)
         #  data = response.read()
         #参数说明http://www.heweather.com/documents/api
         if response:
@@ -71,7 +72,7 @@ def WeatherGetDataTimelyView(request):
             'http://api.heweather.com/x3/weather?cityid=CN101140101&key=70b4a25780c44125a37b8f25f946b169',
            ]
     for url in urls:
-        response = urllib2.urlopen(url)
+        response = urlopen(url)
         #  data = response.read()
         #参数说明http://www.heweather.com/documents/api
         if response:
