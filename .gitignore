@@ -107,7 +107,8 @@ album/migrations/
 blog/migrations/
 tools/migrations/
 wechat/migrations/
-
+hitcount/migrations/
+easy_thumbnails/migrations/
 
 # media files
 media/*
