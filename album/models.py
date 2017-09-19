@@ -11,8 +11,10 @@ class Album(models.Model):
     name = models.CharField(max_length=200, unique=True)
     e_name = models.CharField(max_length=200, unique=True)
     desc = models.TextField(blank=True)
-    estblished_date = models.DateTimeField(auto_now_add=True, verbose_name='Establish Date')
+    established_date = models.DateTimeField(auto_now_add=True, verbose_name='Establish Date')
     def __unicode__(self):
+        return self.name
+    def __str__(self):
         return self.name
 
 class Photo(models.Model):

@@ -12,7 +12,7 @@ class AlbumIndexView(generic.ListView):
     context_object_name = 'album_list'
 
     def get_queryset(self):
-        return Album.objects.order_by('-estblished_date')
+        return Album.objects.order_by('-established_date')
 
 class AlbumDetailView(generic.ListView):
     template_name = 'album/album_detail.html'

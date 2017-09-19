@@ -29,17 +29,12 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'v6qkw03_b$3wmy**9c&)txnuj76)(+vj*rut+n$p4e2della)4'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-# if 'SERVER_SOFTWARE' in os.environ:
-#     DEBUG = False
-# else:
-#     DEBUG = True
-
+with open('/etc/secret_key.txt') as f:
+    SECRET_KEY = f.read().strip()
+    # SECRET_KEY = 'v6qkw03_b$3wmy**9c&)txnuj76)(+vj*rut+n$p4e2della)4'
 
 if DEBUG:
-    ALLOWED_HOSTS = ['127.0.0.1']
+    ALLOWED_HOSTS = []
 else:
     ALLOWED_HOSTS = ['jaydenfoo.com', '67.216.217.73', 'www.jaydenfoo.com']
 
@@ -53,15 +48,12 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog',
-    'ckeditor',
-    'ckeditor_uploader',
-    #'DjangoUeditor',
+    'DjangoUeditor',
     'tools',
     'hitcount',
     'album',
     'easy_thumbnails',
     'wechat',
-    'view360',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -98,14 +90,19 @@ WSGI_APPLICATION = 'jaydenfoo.wsgi.application'
 LOGIN_URL = 'login'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
-if 'SERVER_SOFTWARE' in os.environ:
-    from sae.const import (MYSQL_HOST, MYSQL_PORT, MYSQL_USER, MYSQL_PASS, MYSQL_DB)
-else:
+if DEBUG:
     MYSQL_DB = 'mydata'
     MYSQL_USER = 'root'
     MYSQL_PASS = '1234'
     MYSQL_HOST = ''
     MYSQL_PORT = ''
+else:
+    with open('/etc/mysql_config.txt') as f:
+        MYSQL_DB = f.readline().strip()
+        MYSQL_USER = f.readline().strip()
+        MYSQL_PASS = f.readline().strip()
+        MYSQL_HOST = ''
+        MYSQL_PORT = ''
 
 
 DATABASES = {
@@ -148,19 +145,13 @@ EMAIL_HOST = 'smtp.163.com'
 EMAIL_PORT = 25
 EMAIL_HOST_USER = 'icebrick@163.com'
 EMAIL_HOST_PASSWORD = ''
-# ckeditor setting
-CKEDITOR_UPLOAD_PATH = 'ckuploader/'
+
+
 #hitcout settings
 HITCOUNT_KEEP_HIT_ACTIVE = {'days': 1}
 HITCOUNT_HITS_PER_IP_LIMIT = 0  # unlimited
 HITCOUNT_EXCLUDE_USER_GROUP = ()  # not used
 HITCOUNT_KEEP_HIT_IN_DATABASE = {'seconds': 10}
-
-#SAE的文件存储系统
-if 'SERVER_SOFTWARE' in os.environ:
-    FILE_UPLOAD_MAX_MEMORY_SIZE = 10485760
-    DEFAULT_FILE_STORAGE = 'sae.ext.django.storage.backend.Storage'
-    STORAGE_BUCKET_NAME = 'media'
 
 # easy_thumbnails设置
 THUMBNAIL_ALIASES = {
@@ -171,7 +162,3 @@ THUMBNAIL_ALIASES = {
 
 THUMBNAIL_DEBUG = True
 
-if 'SERVER_SOFTWARE' in os.environ:
-    THUMBNAIL_DEFAULT_STORAGE = 'sae.ext.django.storage.backend.Storage'
-    THUMBNAIL_MEDIA_ROOT = 'media'
-    THUNBNAIL_BASEDIR = 'media'
