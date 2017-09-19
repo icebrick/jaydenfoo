@@ -112,3 +112,6 @@ wechat/migrations/
 # media files
 media/*
 
+# pycharm setting config
+.idea/
+
