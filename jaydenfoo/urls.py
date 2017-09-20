@@ -23,7 +23,7 @@ from blog import views as blog_views
 from .views import RegisterView
 
 urlpatterns = [
-    url(r'^$', blog_views.IndexView),
+    url(r'^$', blog_views.BlogPaginatorView.as_view()),
     url(r'^', include('django.contrib.auth.urls')),
     url(r'^blog/', include('blog.urls', namespace='blog')),
     url(r'^admin/', include(admin.site.urls)),
