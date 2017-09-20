@@ -116,3 +116,5 @@ media/*
 # pycharm setting config
 .idea/
 
+# static collect folder
+static_collect/
