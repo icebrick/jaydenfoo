@@ -30,7 +30,7 @@ def ToolsWeatherView(request):
 
 def ToolsWeatherGetDataView(request):
     key = '70b4a25780c44125a37b8f25f946b169'
-    citys = ['shanghai', 'beijing', 'xiamen', 'lasa']
+    citys = ['shanghai', 'huhehaote', 'beijing', 'xiamen', 'lasa']
     urls = ['https://free-api.heweather.com/v5/weather?city=%s&key=%s' %(city, key) for city in citys]
 
     # delete the exit instances and later create the new instances
