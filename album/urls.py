@@ -8,5 +8,5 @@ from . import views
 urlpatterns = [
        url(r'^$', views.AlbumIndexView.as_view(), name='index'),
        url(r'^demo$', views.AlbumDemoView, name='demo'),
-       url(r'^(?P<album_e_name>[0-9a-zA-Z]+)$', views.AlbumDetailView.as_view(), name='detail'),
+       url(r'^(?P<pk>\d+)$', views.AlbumDetailView.as_view(), name='detail'),
         ]

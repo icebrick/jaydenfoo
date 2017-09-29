@@ -10,7 +10,7 @@
         {% for album in album_list %}
         <div class="grid-item">
             <div class="thumbnail">
-                <a title="huace" href="{% url 'album:detail' album.e_name %}" class='thumbnail' >
+                <a title="huace" href="{% url 'album:detail' album.id %}" class='thumbnail' >
                 {% for photo in album.photo_set.all %}
                     {% if photo.as_cover %}
                         <image src="{% thumbnail photo.image 400x400 %}" class="img-responsive" alt="图片被浏览器吃了（T﹏T）">

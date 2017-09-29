@@ -12,6 +12,7 @@ class Album(models.Model):
     e_name = models.CharField(max_length=200, unique=True)
     desc = models.TextField(blank=True)
     established_date = models.DateTimeField(auto_now_add=True, verbose_name='Establish Date')
+    count_hit = models.IntegerField(default=0, editable=False)
     def __unicode__(self):
         return self.name
     def __str__(self):
