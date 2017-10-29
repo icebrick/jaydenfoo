@@ -8,5 +8,4 @@ from . import views
 urlpatterns = [
         url(r'^$', views.WechatIndexView, name='index' ),
         url(r'^test$', views.WechatTestView, name='test'),
-        url(r'^wyx$', views.WechatWyxView, name='wyx'),
         ]

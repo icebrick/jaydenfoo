@@ -2,22 +2,16 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
-from django.utils.encoding import smart_str, smart_text
+from django.utils.encoding import smart_str
 
 import xml.etree.ElementTree as ET
 import hashlib, time
-from urllib.request import urlopen, Request, quote
 
 from utility.transtool import Transfer
 
-from .models import WechatData
-
-YOUDAO_KEY = 1910598203
-YOUDAO_KEY_FROM = 'jaydenfoo'
-YOUDAO_DOC_TYPE = 'xml'
-
 
 def checkSignature(request):
+    '''Check the signature from wechat api for the first bind'''
     signature = request.GET.get('signature', None)
     timestamp = request.GET.get('timestamp', None)
     nonce = request.GET.get('nonce', None)
@@ -34,84 +28,23 @@ def checkSignature(request):
     else:
         return None
 
-@csrf_exempt
-def responseMsg(request):
-
-    rawStr = smart_str(request.body)
-
-    msg = parseMsgXml(ET.fromstring(rawStr))
-
-    queryStr = msg.get('Content', 'You have input nothing')
-
-    raw_youdaoURL = "http://fanyi.youdao.com/openapi.do?keyfrom=%s&key=%s&type=data&doctype=%s&version=1.1&q=" % (YOUDAO_KEY_FROM,YOUDAO_KEY,YOUDAO_DOC_TYPE)
-    youdaoURL = '%s%s' % (raw_youdaoURL, quote(queryStr))
-
-    req = Request(url=youdaoURL)
-    result = urlopen(req).read()
-
-    replyContent = parseYouDaoXml(ET.fromstring(result))
-
-    return getReplyXml(msg, replyContent)
-
 def parseMsgXml(rootElem):
+    '''Parse the xml response get from wechat api'''
     msg = {}
     if rootElem.tag == 'xml':
         for child in rootElem:
             msg[child.tag] = smart_str(child.text)
     return msg
 
-def parseYouDaoXml(rootElem):
-    replyContent = ''
-    if rootElem.tag == 'youdao-fanyi':
-        for child in rootElem:
-            # 错误码
-            if child.tag == 'errorCode':
-                if child.text == '20':
-                    return 'too long to translate\n'
-                elif child.text == '30':
-                    return 'can not be able to translate with effect\n'
-                elif child.text == '40':
-                    return 'can not be able to support this language\n'
-                elif child.text == '50':
-                    return 'invalid key\n'
-
-            # 查询字符串
-            elif child.tag == 'query':
-                replyContent = "%s%s\n" % (replyContent, child.text)
-
-            # 有道翻译
-            elif child.tag == 'translation':
-                replyContent = '%s%s\n%s\n' % (replyContent, '-' * 3 + u'有道翻译' + '-' * 3, child[0].text)
-
-            # 有道词典-基本词典
-            elif child.tag == 'basic':
-                replyContent = "%s%s\n" % (replyContent, '-' * 3 + u'基本词典' + '-' * 3)
-                for c in child:
-                    if c.tag == 'phonetic':
-                        replyContent = '%s%s\n' % (replyContent, c.text)
-                    elif c.tag == 'explains':
-                        for ex in c.findall('ex'):
-                            replyContent = '%s%s\n' % (replyContent, ex.text)
-
-            # 有道词典-网络释义
-            elif child.tag == 'web':
-                replyContent = "%s%s\n" % (replyContent, '-' * 3 + u'网络释义' + '-' * 3)
-                for explain in child.findall('explain'):
-                    for key in explain.findall('key'):
-                        replyContent = '%s%s\n' % (replyContent, key.text)
-                    for value in explain.findall('value'):
-                        for ex in value.findall('ex'):
-                            replyContent = '%s%s\n' % (replyContent, ex.text)
-                    replyContent = '%s%s\n' % (replyContent,'--')
-    return replyContent
-
 def getReplyXml(msg,replyContent):
+    '''Create the xml response content for wechat api'''
     extTpl = "<xml><ToUserName><![CDATA[%s]]></ToUserName><FromUserName><![CDATA[%s]]></FromUserName><CreateTime>%s</CreateTime><MsgType><![CDATA[%s]]></MsgType><Content><![CDATA[%s]]></Content></xml>"
     extTpl = extTpl % (msg['FromUserName'],msg['ToUserName'],str(int(time.time())),'text', replyContent)
     return extTpl
 
 @csrf_exempt
 def WechatIndexView(request):
+    '''Main view function for wechat'''
     if request.method == 'GET':
         response = HttpResponse(checkSignature(request))
         return response
@@ -125,9 +58,6 @@ def WechatIndexView(request):
         res = trans.transfer(queryStr)
         return HttpResponse(getReplyXml(msg, res), content_type='text/xml')
 
-
-def WechatWyxView(request):
-    return render(request, 'wechat/wechat_wyx.html')
-
 def WechatTestView(request):
+    '''Just for test'''
     return render(request, 'wechat/wechat_transfer_test.html')
