@@ -8,13 +8,15 @@ import xml.etree.ElementTree as ET
 import hashlib, time
 from urllib.request import urlopen, Request, quote
 
+from utility.transtool import Transfer
+
 from .models import WechatData
 
 YOUDAO_KEY = 1910598203
 YOUDAO_KEY_FROM = 'jaydenfoo'
 YOUDAO_DOC_TYPE = 'xml'
 
-# Create your views here.
+
 def checkSignature(request):
     signature = request.GET.get('signature', None)
     timestamp = request.GET.get('timestamp', None)
@@ -26,7 +28,7 @@ def checkSignature(request):
     tmplist = [token, timestamp, nonce]
     tmplist.sort()
     tmpstr = '%s%s%s'%tuple(tmplist)
-    tmpstr = hashlib.sha1(tmpstr).hexdigest()
+    tmpstr = hashlib.sha1(tmpstr.encode('utf-8')).hexdigest()
     if tmpstr == signature:
         return echostr
     else:
@@ -114,9 +116,20 @@ def WechatIndexView(request):
         response = HttpResponse(checkSignature(request))
         return response
     else:
-        response = HttpResponse(responseMsg(request), content_type='application/xml')
-        return response
+        rawStr = smart_str(request.body)
+        msg = parseMsgXml(ET.fromstring(rawStr))
+        queryStr = msg.get('Content', 'You have input nothing')
+
+        # queryStr = request.POST['str']
+        trans = Transfer()
+        res = trans.transfer(queryStr)
+        return HttpResponse(res)
+
+
 
 
 def WechatWyxView(request):
     return render(request, 'wechat/wechat_wyx.html')
+
+def WechatTestView(request):
+    return render(request, 'wechat/wechat_transfer_test.html')

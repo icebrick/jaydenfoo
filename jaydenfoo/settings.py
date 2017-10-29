@@ -29,7 +29,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-with open('/etc/secret_key.txt') as f:
+with open(os.path.join(BASE_DIR, 'keyinfo/secret_key.txt')) as f:
     SECRET_KEY = f.read().strip()
     # SECRET_KEY = 'v6qkw03_b$3wmy**9c&)txnuj76)(+vj*rut+n$p4e2della)4'
 
@@ -97,7 +97,7 @@ if DEBUG:
     MYSQL_HOST = ''
     MYSQL_PORT = ''
 else:
-    with open('/etc/mysql_config.txt') as f:
+    with open(os.path.join(BASE_DIR, 'keyinfo/mysql_config.txt')) as f:
         MYSQL_DB = f.readline().strip()
         MYSQL_USER = f.readline().strip()
         MYSQL_PASS = f.readline().strip()

@@ -1,0 +1,11 @@
+
+{% extends "base.html" %}
+
+{% block content %}
+
+<form action="{% url 'wechat:index' %}" method="post">
+    <input type="text" name="str"/>
+    <button type="submit">翻译</button>
+</form>
+{% endblock %}
+
