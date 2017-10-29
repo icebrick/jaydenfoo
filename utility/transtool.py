@@ -63,8 +63,19 @@ class Transfer(object):
                    'salt': self.salt,
                    'sign': sign}
 
-        res = requests.get(self.urlbase, params=payload)
-        dst = res.json()['trans_result'][0]['dst']
+        res = requests.get(self.urlbase, params=payload).json()
+        # handle the error
+        error_code = res.get('error_code', None)
+        if error_code:
+            dst = '发生未知错误，请联系开发者：fjun333@163.com'
+            if error_code == '52001':
+                dst = '请求超时，请重试'
+            if error_code == '52002':
+                dst = '系统错误，请重试'
+            if error_code == '54003' or error_code == '54005':
+                dst = '请降低您的访问频率,3s后重试'
+        else:
+            dst = res.json()['trans_result'][0]['dst']
         return dst
 
     def run(self):
