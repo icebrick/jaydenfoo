@@ -118,3 +118,9 @@ media/*
 
 # static collect folder
 static_collect/
+
+# ignore the baiduapi account info
+utility/baidu_api_account.txt
+
+# ignore the key info for the site
+keyinfo/*
