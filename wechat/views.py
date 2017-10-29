@@ -123,9 +123,7 @@ def WechatIndexView(request):
         # queryStr = request.POST['str']
         trans = Transfer()
         res = trans.transfer(queryStr)
-        return HttpResponse(res)
-
-
+        return HttpResponse(getReplyXml(msg, res), content_type='text/xml')
 
 
 def WechatWyxView(request):
