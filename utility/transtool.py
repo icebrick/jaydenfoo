@@ -37,12 +37,19 @@ class Transfer(object):
         else:
             return False
 
+    def clean_str(self, q):
+        '''Eliminate the \n in the middle of string'''
+        q = q.strip()
+        q = ' '.join(q.splitlines())
+        return q
+
     def transfer(self, q):
         '''transfer the str passed in, used in wechat api'''
-        if self.is_chinese(q):
+        q = self.clean_str(q)
+        if self.is_chinese(q[0]):
             from_lang = 'zh'
             to_lang = 'en'
-        elif self.is_alphabet(q):
+        elif self.is_alphabet(q[0]):
             from_lang = 'en'
             to_lang = 'zh'
         else:
