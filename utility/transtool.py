@@ -75,7 +75,7 @@ class Transfer(object):
             if error_code == '54003' or error_code == '54005':
                 dst = '请降低您的访问频率,3s后重试'
         else:
-            dst = res.json()['trans_result'][0]['dst']
+            dst = res['trans_result'][0]['dst']
         return dst
 
     def run(self):
