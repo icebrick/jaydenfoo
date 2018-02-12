@@ -1,11 +1,10 @@
 {% extends 'base.html' %}
 
-
-
 {% block title %}{{ this_album.name }}{% endblock %}
 
 {% block content %}
 {% load thumbnail %}
+<!-- 相册标题行 -->
 <div class="container">
     <div class="row">
         <h2 class="text-center">{{ this_album.name }}</h2>
@@ -15,6 +14,7 @@
     </div>
 </div>
 
+<!-- 瀑布式图片显示区 -->
 <div class="container">
 		<div class="grid">
 		    {% for photo in this_album.photo_set.all %}

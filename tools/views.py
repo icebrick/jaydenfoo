@@ -1,23 +1,19 @@
 #-*- coding: utf-8 -*-
+import collections
+from datetime import datetime, timedelta, time
+import json
+import requests
+from urllib.request import urlopen
+
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, JsonResponse
-from django.core.urlresolvers import reverse
 from django.db.models import Max, Min
-from datetime import datetime, timedelta, time
-import collections
-
 
 from .models import Weather, WeatherNow, WeatherForecast, ScheduleItem
 from .forms import ScheduleItemForm
-#import urllib2
-from urllib.request import urlopen
-import requests
-import json
-import ast
 
-# Create your views here.
+
 def ToolsIndexView(request):
     return render(request, 'tools/tools_index.html')
 

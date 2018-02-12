@@ -15,12 +15,6 @@
           <br>
           <p class="text-center no-margin-bottom"><span class="text-success">Author:</span> {{ this_article.author }} &nbsp&nbsp&nbsp<span class="text-success">Date:</span> {{ this_article.pub_date|date:"Y-m-d"}} &nbsp&nbsp&nbsp<span class="text-success">Read:</span> {{hitcount.total_hits}}
           <hr class="no-margin-top">
-          <!-- 点击数
-          <p>Total Hits: {{hitcount.total_hits}}</p>
-          <p>The unique PK: {{hitcount.pk}}</p>
-          <p>Hit Counted?: {{hitcount.hit_counted}}</p>
-          <p>Hit response: {{hitcount.hit_message}}</p>
-          -->
           <p>{{ this_article.content|safe }}</p>
         </div>
       </div>
@@ -42,8 +36,7 @@
     </div>
   </div>
 
-
-<!-- 评论展示 -->
+<!-- 评论显示-->
   <div class="row">
     <div class="col-md-8">
       <div class="panel panel-default">
@@ -51,15 +44,12 @@
         <div class="panel-body">
         {% for comment in comment_list %}
           <p class="text-info">{{comment.nick_name}}: </p>
-
           <p>{{comment.content}}</p>
           <small class="text-primary">{{ comment.pub_date|date:'Y-m-d' }}</small>
-
-
           <hr>
         {% empty %}
-					<p>没有评论</p>
-				{% endfor %}
+          <p>没有评论</p>
+        {% endfor %}
         </div>
       </div>
     </div>
@@ -128,13 +118,5 @@ $(function () {
       $('#nav_zheteng').parent().removeClass('active')
     })
 </script>
+
 {% endblock %}
-
-
-
-
-
-
-
-
-

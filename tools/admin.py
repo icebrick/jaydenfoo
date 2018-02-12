@@ -1,7 +1,8 @@
 from django.contrib import admin
+
 from .models import Weather, WeatherNow, WeatherForecast, ScheduleItem
 
-# Register your models here.
+
 class WeatherForecastInline(admin.StackedInline):
     model = WeatherForecast
     fieldsets = [('general', {'fields': ['fc_date', 'fc_tmp_max', 'fc_tmp_min'], 'classes':['collapse',]})]

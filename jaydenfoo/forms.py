@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 # encoding: utf-8
-
 from django.contrib.auth.models import User
 from django import forms
 
+
 class RegisterForm(forms.Form):
+    '''注册表'''
     username = forms.CharField(
             label=u'用户名',
             help_text=u'用户名可用于登录，不能包含空格或@字符',
@@ -63,6 +64,7 @@ class RegisterForm(forms.Form):
         user.save()
 
 class LoginForm(forms.Form):
+    '''登录表'''
     username = forms.CharField(
             label=u'用户名',
             max_length=20,

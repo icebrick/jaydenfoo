@@ -1,11 +1,11 @@
 #-*- coding: utf8 -*-
+import hashlib, time
+import xml.etree.ElementTree as ET
+
 from django.shortcuts import render
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.encoding import smart_str
-
-import xml.etree.ElementTree as ET
-import hashlib, time
 
 from utility.transtool import Transfer
 

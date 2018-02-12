@@ -15,19 +15,18 @@ Including another URLconf
 """
 from django.conf.urls import include, url
 from django.contrib import admin
-
 from django.conf import settings
 from django.conf.urls.static import static
-from django.contrib.auth import views as auth_views
+
 from blog import views as blog_views
 from .views import RegisterView
+
 
 urlpatterns = [
     url(r'^$', blog_views.BlogPaginatorView.as_view()),
     url(r'^', include('django.contrib.auth.urls')),
     url(r'^blog/', include('blog.urls', namespace='blog')),
     url(r'^admin/', include(admin.site.urls)),
-    # url(r'^ckeditor/', include('ckeditor_uploader.urls')),
     url(r'^ueditor/', include('DjangoUeditor.urls')),
     url(r'^tools/', include('tools.urls', namespace='tools')),
     url(r'hitcount/', include('hitcount.urls', namespace='hitcount')),

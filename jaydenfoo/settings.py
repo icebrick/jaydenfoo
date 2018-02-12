@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-import os
-import tempfile
 import os.path
 import platform
 
@@ -31,7 +29,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 with open(os.path.join(BASE_DIR, 'keyinfo/secret_key.txt')) as f:
     SECRET_KEY = f.read().strip()
-    # SECRET_KEY = 'v6qkw03_b$3wmy**9c&)txnuj76)(+vj*rut+n$p4e2della)4'
 
 if DEBUG:
     ALLOWED_HOSTS = []

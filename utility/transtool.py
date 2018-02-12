@@ -1,10 +1,9 @@
-from builtins import object
 import os
 import hashlib
 import requests
 
 
-class Transfer(object):
+class Transfer:
     '''Transfer between Chinese and English using baidu transfer API'''
     def __init__(self, account_file_path=None):
         # Baidu translate api base url

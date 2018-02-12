@@ -1,62 +1,61 @@
 # -*- coding: utf-8 -*-
 from django.db import models
-from django.contrib.auth.models import User
 
-# Create your models here.
+
 class WeatherNow(models.Model):
     # basic
-    city = models.CharField(max_length=100)
-    city_id = models.CharField('city id', max_length=100)
-    update_loc = models.CharField('update time(local) from weather api', max_length=100)
-    update_utc = models.CharField('update time(utc) from weather api', max_length=100)
+    city = models.CharField(max_length=20)
+    city_id = models.CharField('city id', max_length=20)
+    update_loc = models.CharField('update time(local) from weather api', max_length=20)
+    update_utc = models.CharField('update time(utc) from weather api', max_length=20)
     # now
     # 天气情况代码说明 https://www.heweather.com/documents/condition
-    cond_code = models.CharField('weather condition code', max_length=100)
-    cond_txt = models.CharField('weather condition text', max_length=100)
-    fl = models.CharField('sendible temperature', max_length=100)
-    hum = models.CharField('relative humidity', max_length=100)
-    pcpn = models.CharField('precipitation', max_length=100)
-    pres = models.CharField('pressure', max_length=100)
-    tmp = models.CharField('temperature', max_length=100)
-    vis = models.CharField('visibility', max_length=100)
-    wind_deg = models.CharField('wind degree', max_length=100)
-    wind_dir = models.CharField('wind direction', max_length=100)
-    wind_sc = models.CharField('wind scale', max_length=100)
-    wind_spd = models.CharField('wind speed', max_length=100)
+    cond_code = models.CharField('weather condition code', max_length=20)
+    cond_txt = models.CharField('weather condition text', max_length=20)
+    fl = models.CharField('sendible temperature', max_length=20)
+    hum = models.CharField('relative humidity', max_length=20)
+    pcpn = models.CharField('precipitation', max_length=20)
+    pres = models.CharField('pressure', max_length=20)
+    tmp = models.CharField('temperature', max_length=20)
+    vis = models.CharField('visibility', max_length=20)
+    wind_deg = models.CharField('wind degree', max_length=20)
+    wind_dir = models.CharField('wind direction', max_length=20)
+    wind_sc = models.CharField('wind scale', max_length=20)
+    wind_spd = models.CharField('wind speed', max_length=20)
     # aqi
-    aqi_index = models.CharField(max_length=100)
-    aqi_qlty = models.CharField(max_length=100)
+    aqi_index = models.CharField(max_length=20)
+    aqi_qlty = models.CharField(max_length=20)
 
     def __str__(self):
         return self.city+'  '+self.update_utc
 
 class WeatherForecast(models.Model):
-    fc_city = models.CharField('city name', max_length=100)
+    fc_city = models.CharField('city name', max_length=20)
     fc_index = models.IntegerField()
     # 天文指数
-    fc_mr = models.CharField('moon rise time', max_length=100)
-    fc_ms = models.CharField('moon set time', max_length=100)
-    fc_sr = models.CharField('sun rise time', max_length=100)
-    fc_ss = models.CharField('sun set time', max_length=100)
+    fc_mr = models.CharField('moon rise time', max_length=20)
+    fc_ms = models.CharField('moon set time', max_length=20)
+    fc_sr = models.CharField('sun rise time', max_length=20)
+    fc_ss = models.CharField('sun set time', max_length=20)
     # condition
-    fc_txt_d = models.CharField('day condition', max_length=100)
-    fc_txt_n = models.CharField('night condition', max_length=100)
+    fc_txt_d = models.CharField('day condition', max_length=20)
+    fc_txt_n = models.CharField('night condition', max_length=20)
     # general
-    fc_date = models.CharField(max_length=100)
-    fc_hum = models.CharField('humidity', max_length=100)
-    fc_pcpn = models.CharField('precipitation', max_length=100)
-    fc_pop = models.CharField('precipitation optitunity', max_length=100)
-    fc_pres = models.CharField('pressure', max_length=100)
-    fc_uv = models.CharField('uv', max_length=100)
-    fc_vis = models.CharField('visibility', max_length=100)
+    fc_date = models.CharField(max_length=20)
+    fc_hum = models.CharField('humidity', max_length=20)
+    fc_pcpn = models.CharField('precipitation', max_length=20)
+    fc_pop = models.CharField('precipitation optitunity', max_length=20)
+    fc_pres = models.CharField('pressure', max_length=20)
+    fc_uv = models.CharField('uv', max_length=20)
+    fc_vis = models.CharField('visibility', max_length=20)
     # temperature
-    fc_tmp_max = models.CharField('maximum temperature', max_length=100)
-    fc_tmp_min = models.CharField('minimum temperature', max_length=100)
+    fc_tmp_max = models.CharField('maximum temperature', max_length=20)
+    fc_tmp_min = models.CharField('minimum temperature', max_length=20)
     # wind
-    fc_wind_deg = models.CharField('wind degree', max_length=100)
-    fc_wind_dir = models.CharField('wind direction', max_length=100)
-    fc_wind_sc = models.CharField('wind scale', max_length=100)
-    fc_wind_spd = models.CharField('wind speed', max_length=100)
+    fc_wind_deg = models.CharField('wind degree', max_length=20)
+    fc_wind_dir = models.CharField('wind direction', max_length=20)
+    fc_wind_sc = models.CharField('wind scale', max_length=20)
+    fc_wind_spd = models.CharField('wind speed', max_length=20)
     # forecast foreignkey
     weathernow = models.ForeignKey('WeatherNow', on_delete=models.CASCADE, )
 
@@ -65,8 +64,8 @@ class WeatherForecast(models.Model):
 
 
 class Weather(models.Model):
-    city = models.CharField(max_length=200, editable=False)
-    city_id = models.CharField(max_length=200, editable=False)
+    city = models.CharField(max_length=20, editable=False)
+    city_id = models.CharField(max_length=20, editable=False)
     updata_time = models.DateTimeField(auto_now=True, editable=False)
     aqi = models.IntegerField(verbose_name='空气质量指数', editable=False)
     pm25 = models.IntegerField(editable=False)
@@ -87,7 +86,7 @@ class ScheduleItem(models.Model):
     pub_date = models.DateTimeField(auto_now_add=True)
     date_modified = models.DateTimeField(auto_now=True)
     finish = models.BooleanField(default=False)
-    user = models.CharField(max_length=100)
+    user = models.CharField(max_length=20)
 
     def __unicode__(self):
         return self.user

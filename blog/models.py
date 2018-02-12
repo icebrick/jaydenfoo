@@ -1,25 +1,25 @@
 from django.db import models
-# from ckeditor.fields import RichTextField
-# from ckeditor_uploader.fields import RichTextUploadingField
-
 from DjangoUeditor.models import UEditorField
 
-# Create your models here.
+
 class Tag(models.Model):
-    name = models.CharField(max_length=200, unique=True)
-    count_post = models.IntegerField(default=0, editable=False)
+    '''文章标签'''
+    name = models.CharField(max_length=10, unique=True) # 标签名称
+    count_post = models.IntegerField(default=0, editable=False) # 包含该标签的文章
+
     def __str__(self):
         return self.name
 
 class Article(models.Model):
+    '''文章'''
     title = models.CharField(max_length=100)
-    author = models.CharField(max_length=200)
+    author = models.CharField(max_length=10)
     pub_date = models.DateTimeField('date publishded')
     abstract = models.CharField(max_length=2000, blank=True)
-    # content = RichTextUploadingField()
     content = UEditorField(u'content    ', width=600, height=300, toolbars="full", imagePath="blog/article_image/", filePath="blog/article_file/", upload_settings={"imageMaxSize":1204000}, settings={}, command=None, blank=True)
     count_hit = models.IntegerField(default=0, editable=False)
     tags = models.ManyToManyField(Tag, blank=True)
+
     def __str__(self):
         return self.title
 
@@ -28,14 +28,11 @@ class Article(models.Model):
         return reverse('blog.views.BlogDetailView', args=[str(self.id)])
 
 class Comment(models.Model):
+    '''对文章的评论'''
     nick_name = models.CharField(max_length=10)
     content = models.CharField(max_length=2000)
     pub_date = models.DateTimeField(auto_now=True)
-    article  = models.ForeignKey(Article, null=True)
-    def __str__(self):
-        return self.nick_name
+    article  = models.ForeignKey(Article, on_delete=models.CASCADE)
 
-class Name(models.Model):
-    name = models.CharField(max_length=5)
     def __str__(self):
-        return self.name
+        return self.nick_name + ': ' + self.content[:10]

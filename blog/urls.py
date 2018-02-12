@@ -2,6 +2,7 @@ from django.conf.urls import url
 
 from . import views
 
+
 urlpatterns = [
     url(r'^$', views.BlogPaginatorView.as_view(), name='index'),
     url(r'^page/(?P<page>[0-9]+)$', views.BlogPaginatorView.as_view(), name='paginator'),
