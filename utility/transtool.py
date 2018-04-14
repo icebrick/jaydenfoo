@@ -1,20 +1,17 @@
 import os
 import hashlib
+
+from django.conf import settings
 import requests
 
 
 class Transfer:
     '''Transfer between Chinese and English using baidu transfer API'''
-    def __init__(self, account_file_path=None):
+    def __init__(self):
         # Baidu translate api base url
         self.urlbase = 'http://fanyi-api.baidu.com/api/trans/vip/translate'
-        # Get the script file path
-        self.basedir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-        # Get the appid password and md5_salt from a local file
-        if account_file_path == None:
-            account_file_path = os.path.join(self.basedir, 'keyinfo/baidu_api_account.txt')
-        with open(account_file_path, 'r') as f:
-            self.appid, self.pw, self.salt = f.read().splitlines()
+        # Get the appid password and md5_salt
+        self.appid, self.pw, self.salt = settings.BD_TL_APPID, settings.BD_TL_PW, settings.BD_TL_SALT
 
     def gen_md5(self, str):
         '''Generate the md5 according to the api requirement'''

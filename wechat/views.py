@@ -1,4 +1,3 @@
-#-*- coding: utf8 -*-
 import hashlib, time
 import xml.etree.ElementTree as ET
 
