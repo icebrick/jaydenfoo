@@ -27,7 +27,6 @@ urlpatterns = [
     url(r'^', include('django.contrib.auth.urls')),
     url(r'^blog/', include('blog.urls', namespace='blog')),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^ueditor/', include('DjangoUeditor.urls')),
     url(r'^tools/', include('tools.urls', namespace='tools')),
     url(r'hitcount/', include('hitcount.urls', namespace='hitcount')),
     url(r'^album/', include('album.urls', namespace='album')),

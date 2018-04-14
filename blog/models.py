@@ -1,5 +1,4 @@
 from django.db import models
-from DjangoUeditor.models import UEditorField
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
 
