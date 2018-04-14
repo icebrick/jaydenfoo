@@ -51,6 +51,7 @@ INSTALLED_APPS = (
     'album',
     'easy_thumbnails',
     'wechat',
+    'markdownx',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -159,3 +160,5 @@ THUMBNAIL_ALIASES = {
 
 THUMBNAIL_DEBUG = True
 
+# django markdownx
+MARKDOWNX_MARKDOWN_EXTENSIONS = ['markdown.extensions.codehilite']

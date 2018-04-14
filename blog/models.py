@@ -1,5 +1,7 @@
 from django.db import models
 from DjangoUeditor.models import UEditorField
+from markdownx.models import MarkdownxField
+from markdownx.utils import markdownify
 
 
 class Tag(models.Model):
@@ -16,9 +18,14 @@ class Article(models.Model):
     author = models.CharField(max_length=10)
     pub_date = models.DateTimeField('date publishded')
     abstract = models.CharField(max_length=2000, blank=True)
-    content = UEditorField(u'content    ', width=600, height=300, toolbars="full", imagePath="blog/article_image/", filePath="blog/article_file/", upload_settings={"imageMaxSize":1204000}, settings={}, command=None, blank=True)
+    # content = UEditorField(u'content    ', width=600, height=300, toolbars="full", imagePath="blog/article_image/", filePath="blog/article_file/", upload_settings={"imageMaxSize":1204000}, settings={}, command=None, blank=True)
+    content = MarkdownxField()
     count_hit = models.IntegerField(default=0, editable=False)
     tags = models.ManyToManyField(Tag, blank=True)
+
+    @property
+    def formatted_markdown(self):
+        return markdownify(self.content)
 
     def __str__(self):
         return self.title

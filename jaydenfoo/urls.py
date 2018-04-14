@@ -33,5 +33,6 @@ urlpatterns = [
     url(r'^album/', include('album.urls', namespace='album')),
     url(r'^register/$', RegisterView, name='register'),
     url(r'^wechat/', include('wechat.urls', namespace='wechat')),
+    url(r'^markdownx/', include('markdownx.urls')),
 ]  + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

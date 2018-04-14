@@ -15,7 +15,7 @@
           <br>
           <p class="text-center no-margin-bottom"><span class="text-success">Author:</span> {{ this_article.author }} &nbsp&nbsp&nbsp<span class="text-success">Date:</span> {{ this_article.pub_date|date:"Y-m-d"}} &nbsp&nbsp&nbsp<span class="text-success">Read:</span> {{hitcount.total_hits}}
           <hr class="no-margin-top">
-          <p>{{ this_article.content|safe }}</p>
+          <p>{{ this_article.formatted_markdown|safe }}</p>
         </div>
       </div>
     </div>
