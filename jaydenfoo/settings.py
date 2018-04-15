@@ -121,6 +121,11 @@ THUMBNAIL_DEBUG = True
 
 # django markdownx
 MARKDOWNX_MARKDOWN_EXTENSIONS = ['markdown.extensions.codehilite']
+MARKDOWNX_MARKDOWN_EXTENSION_CONFIGS = {
+    'markdown.extensions.codehilite': {
+        'linenums': True
+    }
+}
 
 
 if DEBUG:
