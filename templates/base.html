@@ -24,10 +24,6 @@
     <!-- font-awesome -->
     <link rel="stylesheet" href="{% static 'bootstrap/font-awesome/css/font-awesome.min.css' %}" type="text/css">
 
-    <!-- for ueditor syntax highlight -->
-    <link href="{% static 'ueditor/third-party/SyntaxHighlighter/shCoreDefault.css' %}" rel="stylesheet"/>
-    <script type="text/javascript" src="{% static 'ueditor/third-party/SyntaxHighlighter/shCore.js' %}"></script>
-
     <!-- 来之于首页样式 for album-->
     <!-- Custom Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
@@ -82,12 +78,16 @@
 	        <li><a id='nav_zheteng' href="{% url 'tools:index' %}">折腾</a></li>
 	      </ul>
           <ul class='nav navbar-nav navbar-right'>
+              <li><form class="form-inline" action="{% url 'blog:blog_search' %}" method="get">
+                  <input class="form-control" type="search" placeholder="Search" name="pattern">
+                  <button class="btn" type="submit">搜索</button>
+              </form></li>
               {% if user.is_authenticated %}
                 <li><p class='navbar-text'><strong>{{ user.username }}</strong></p></li>
                 <li><a href="{% url 'logout' %}?next={{ request.path }}">注销</a></li>
               {% else %}
-              <li><a href="{% url 'login' %}?next={{ request.path }}">登录</a><li>
-              <li><a href="{% url 'register' %}">注册</a><li>
+                <li><a href="{% url 'login' %}?next={{ request.path }}">登录</a><li>
+                <li><a href="{% url 'register' %}">注册</a><li>
               {% endif %}
           </ul>
 	    </div>

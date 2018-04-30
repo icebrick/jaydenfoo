@@ -1,19 +1,19 @@
-#!/usr/bin/env python
-# encoding:utf-8
 from django.shortcuts import get_object_or_404
 from django.views import generic
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from hitcount.views import HitCountDetailView
 
 from .models import Tag, Article
 from .forms import CommentForm
-#hitcount通用视图
-from hitcount.views import HitCountDetailView
+from .search import search
 
 
 class BlogPaginatorView(generic.ListView):
-    '''文章列表分页视图'''
+    """
+    文章列表分页视图
+    """
 
-    template_name='blog/blog_paginator.html'
+    template_name = 'blog/blog_paginator.html'
     context_object_name = 'article_paginator_list'
 
     def get_queryset(self):
@@ -43,13 +43,16 @@ class BlogPaginatorView(generic.ListView):
             context['this_tag'] = self.tag
         return context
 
+
 class BlogDetailView(HitCountDetailView):
-    '''文章详细展示页视图'''
+    """
+    文章详细展示页视图
+    """
 
     model = Article
     template_name = 'blog/blog_detail.html'
     context_object_name = 'this_article'
-    count_hit = True # 打开统计点击数功能
+    count_hit = True  # 打开统计点击数功能
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -59,15 +62,18 @@ class BlogDetailView(HitCountDetailView):
         context['comment_list'] = self.article.comment_set.all()
         return context
 
+
 class BlogCommentRedirectView(generic.base.RedirectView):
-    '''文章评论重定向试图．
-    　　提交评论时，将评论和当前文章关联，保存评论，
-    　　使用重定向刷新文章页面．
-    　　'''
+    """
+    文章评论重定向试图．
+    提交评论时，将评论和当前文章关联，保存评论，
+    使用重定向刷新文章页面．
+    """
+
     # TODO: 使用Ajax实现该功能
 
     permanent = False
-    pattern_name = 'blog:detail' # 重定向的目标地址
+    pattern_name = 'blog:detail'  # 重定向的目标地址
 
     def get_redirect_url(self, *args, **kwargs):
         if self.request.method == 'POST':
@@ -79,4 +85,30 @@ class BlogCommentRedirectView(generic.base.RedirectView):
                 new_comment.article = this_article
                 new_comment.save()
         return super().get_redirect_url(*args, **kwargs)
+
+
+class BlogSearchView(generic.ListView):
+
+    template_name = 'blog/blog_search.html'
+    context_object_name = 'article_search_results'
+
+    def get_queryset(self):
+        pattern = self.request.GET.get('pattern')
+        queryset = list()
+        if pattern:
+            res = search(pattern)
+            for index, hit in enumerate(res):
+                item = dict()
+                item['id'] = getattr(hit, 'id')
+                item['pub_date'] = getattr(hit, 'pub_date')
+                if hasattr(hit.meta.highlight, 'title'):
+                    item['title'] = getattr(hit.meta.highlight, 'title')[0]
+                else:
+                    item['title'] = hit.title
+                if hasattr(hit.meta.highlight, 'content'):
+                    item['content'] = getattr(hit.meta.highlight, 'content')[0]
+                else:
+                    item['content'] = hit.content
+                queryset.append(item)
+        return queryset
 

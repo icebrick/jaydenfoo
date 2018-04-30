@@ -8,3 +8,4 @@ Pillow==5.1.0
 Pygments==2.2.0
 requests==2.18.4
 urllib3==1.22
+elasticsearch-dsl==6.1.0
