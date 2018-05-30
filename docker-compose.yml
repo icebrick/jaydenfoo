@@ -15,7 +15,7 @@ services:
         build: .
         command: /usr/local/bin/gunicorn -w 4 -k gevent -b 0.0.0.0:80 jaydenfoo.wsgi:application
         volumes:
-            - /home/web_media:/code/jaydenfoo/media
+            - /home/web_media:/code/media
         ports:
             - "80:80"
         links:
