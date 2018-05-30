@@ -1,0 +1,25 @@
+version: "3.1"
+services:
+    db:
+        image: mysql:5.7
+        environment:
+            MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_secret
+            MYSQL_DATABASE: mydata
+        volumes:
+            - /home/mysql_data:/var/lib/mysql
+        restart: always
+        secrets:
+            - mysql_secret
+
+    web:
+        build: .
+        command: /usr/local/bin/gunicorn -w 4 -k gevent -b 0.0.0.0:80 jaydenfoo.wsgi:application
+        ports:
+            - "80:80"
+        links:
+            - db
+        restart: always
+
+secrets:
+    mysql_secret:
+        file: ./secrets/mysql_secret.txt

@@ -125,3 +125,6 @@ keyinfo/*
 # settings
 local_settings.py
 production_settings.py
+
+# secrets
+secrets/
