@@ -22,4 +22,4 @@ services:
 
 secrets:
     mysql_secret:
-        file: ./secrets/mysql_secret.txt
+        file: /home/secrets/mysql_secret.txt
