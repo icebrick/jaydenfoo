@@ -12,13 +12,11 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 """
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+import os
 import os.path
 import platform
 
-if platform.node() == "bandwagonhost-vps-ubuntu":
-    DEBUG = False
-else:
-    DEBUG = True
+DEBUG = True
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -131,7 +129,7 @@ MARKDOWNX_MARKDOWN_EXTENSION_CONFIGS = {
 }
 
 
-if DEBUG:
-    from .local_settings import *  # NOQA
+if os.getenv('ENV') == 'production':
+    from production_settings import *  # NOQA
 else:
-    from .production_settings import *  # NOQA
+    from local_settings import *  # NOQA
