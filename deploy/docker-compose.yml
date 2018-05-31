@@ -1,0 +1,42 @@
+version: "3.1"
+services:
+    db:
+        image: mysql:5.7
+        environment:
+            MYSQL_ROOT_PASSWORD_FILE: /run/secrets/mysql_secret
+            MYSQL_DATABASE: mydata
+        container_name: jaydenfoo_db
+        volumes:
+            - /home/mysql_data:/var/lib/mysql
+        restart: always
+        secrets:
+            - mysql_secret
+
+    web:
+        build:
+            context: ..
+            dockerfile: deploy/Dockerfile_web
+        container_name: jaydenfoo_web
+        command: /usr/local/bin/gunicorn -w 4 -k gevent -b 0.0.0.0:8800 jaydenfoo.wsgi:application
+        restart: always
+
+    my_nginx:
+        build:
+            context: .
+            dockerfile: Dockerfile_nginx
+        container_name: jaydenfoo_nginx
+        depends_on:
+            - db
+            - web
+        links:
+            - db
+            - web
+        ports:
+            - 80:80
+        volumes:
+            - /home/web_media:/media
+            - ../static_collect:/static_collect
+
+secrets:
+    mysql_secret:
+        file: /home/secrets/mysql_secret.txt
