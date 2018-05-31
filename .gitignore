@@ -128,3 +128,6 @@ production_settings.py
 
 # secrets
 secrets/
+
+
+log/*

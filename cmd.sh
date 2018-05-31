@@ -8,4 +8,4 @@
 #
 #python3 manage.py collectstatic
 cd deploy
-docker-compose up --build
+docker-compose up --build -d
