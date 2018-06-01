@@ -130,4 +130,3 @@ production_settings.py
 secrets/
 
 
-log/*
